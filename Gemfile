@@ -20,7 +20,7 @@ group :development, :test do
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'database_cleaner'
   gem 'shoulda-matchers', '~> 3.1'
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'faker'
 end
 
