@@ -22,7 +22,7 @@ RSpec.describe 'Users API', type: :request do
     end
     
     context 'when the user dont exists' do
-      let(:user_id) { User.count + 1 }
+      let(:user_id) { User.all.count + 1 }
       
       it 'returns status code 404' do
         expect(response).to have_http_status(404)
