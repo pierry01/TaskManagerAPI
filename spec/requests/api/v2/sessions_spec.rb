@@ -1,17 +1,21 @@
 require 'rails_helper'
 
 RSpec.describe 'Sessions API', type: :request do
-  let(:user) { create(:user) }
+  let!(:user) { create(:user) }
+  let!(:auth_data) { user.create_new_auth_token }
   
   let(:headers) do
     {
+      'Content-Type' => Mime[:json].to_s,
       'Accept' => 'application/vnd.taskmanager.v2',
-      'Content-Type' => Mime[:json].to_s
+      'access-token' => auth_data['access-token'],
+      'uid' => auth_data['uid'],
+      'client' => auth_data['client']
     }
   end
   
-  describe 'POST /api/sessions' do
-    before { post '/api/sessions', params: { session: credentials }.to_json, headers: headers }
+  describe 'POST /api/auth/sign_in' do
+    before { post '/api/auth/sign_in', params: credentials.to_json, headers: headers }
   
     context 'When the credentials are correct' do
       let(:credentials) { { email: user.email, password: 123456 } }
@@ -20,9 +24,10 @@ RSpec.describe 'Sessions API', type: :request do
         expect(response).to have_http_status(200)
       end
       
-      it 'returns JSON data for the user with auth token' do
-        user.reload
-        expect(json_body[:data][:attributes][:'auth-token']).to eq(user.auth_token)
+      it 'returns the authentication data in the headers' do
+        expect(response.headers).to have_key('access-token')
+        expect(response.headers).to have_key('uid')
+        expect(response.headers).to have_key('client')
       end
     end
     
@@ -39,17 +44,18 @@ RSpec.describe 'Sessions API', type: :request do
     end
   end
   
-  describe 'DELETE /api/sessions/:id' do
+  describe 'DELETE /api/auth/sign_out' do
     let(:auth_token) { user.auth_token }
     
-    before { delete "/api/sessions/#{auth_token}", params: {}, headers: headers }
+    before { delete '/api/auth/sign_out', params: {}, headers: headers }
     
-    it 'returns status code 204' do
-      expect(response).to have_http_status(204)
+    it 'returns status code 200' do
+      expect(response).to have_http_status(200)
     end
     
     it 'changes the user auth_token' do
-      expect(User.find_by(auth_token: auth_token)).to be_nil
+      user.reload
+      expect(user.valid_token?(auth_data['access-token'], auth_data['client'])).to eq(false)
     end
   end
 end
