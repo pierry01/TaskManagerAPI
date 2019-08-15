@@ -2,4 +2,4 @@
 pt-BR:
   time:
     formats:
-      default: "%d/%m/%y %H:%M"
+      datetime: "%d/%m/%y %H:%M"
