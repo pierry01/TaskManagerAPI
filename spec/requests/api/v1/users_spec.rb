@@ -12,8 +12,8 @@ RSpec.describe 'Users API', type: :request do
     }
   end
   
-  describe 'GET /api/users/:id' do
-    before { get "/api/users/#{user_id}", params: {}, headers: headers }
+  describe 'GET /users/:id' do
+    before { get "/users/#{user_id}", params: {}, headers: headers }
     
     context 'when the user exists' do
       it 'returns the user' do
@@ -34,8 +34,8 @@ RSpec.describe 'Users API', type: :request do
     end
   end
   
-  describe 'POST /api/users' do
-    before { post '/api/users', params: { user: user_params }.to_json, headers: headers }
+  describe 'POST /users' do
+    before { post '/users', params: { user: user_params }.to_json, headers: headers }
     
     context 'when the request params are valid' do
       let(:user_params) { attributes_for(:user) }
@@ -62,8 +62,8 @@ RSpec.describe 'Users API', type: :request do
     end
   end
   
-  describe 'PUT /api/users/:id' do
-    before { put "/api/users/#{user_id}", params: { user: user_params }.to_json, headers: headers }
+  describe 'PUT /users/:id' do
+    before { put "/users/#{user_id}", params: { user: user_params }.to_json, headers: headers }
     
     context 'when the request params are valid' do
       let(:user_params) { { email: 'new_email@taskmanager.com' } }
@@ -90,8 +90,8 @@ RSpec.describe 'Users API', type: :request do
     end
   end
   
-  describe 'DELETE /api/users/:id' do
-    before { delete "/api/users/#{user_id}", params: {}, headers: headers }
+  describe 'DELETE /users/:id' do
+    before { delete "/users/#{user_id}", params: {}, headers: headers }
     
     it 'returns status code 204' do
       expect(response).to have_http_status(204)

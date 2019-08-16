@@ -14,8 +14,8 @@ RSpec.describe 'Sessions API', type: :request do
     }
   end
   
-  describe 'POST /api/auth/sign_in' do
-    before { post '/api/auth/sign_in', params: credentials.to_json, headers: headers }
+  describe 'POST /auth/sign_in' do
+    before { post '/auth/sign_in', params: credentials.to_json, headers: headers }
   
     context 'When the credentials are correct' do
       let(:credentials) { { email: user.email, password: 123456 } }
@@ -44,10 +44,10 @@ RSpec.describe 'Sessions API', type: :request do
     end
   end
   
-  describe 'DELETE /api/auth/sign_out' do
+  describe 'DELETE /auth/sign_out' do
     let(:auth_token) { user.auth_token }
     
-    before { delete '/api/auth/sign_out', params: {}, headers: headers }
+    before { delete '/auth/sign_out', params: {}, headers: headers }
     
     it 'returns status code 200' do
       expect(response).to have_http_status(200)

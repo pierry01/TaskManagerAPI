@@ -14,9 +14,9 @@ RSpec.describe 'Users API', type: :request do
     }
   end
   
-  describe 'GET /api/auth/validate_token' do
+  describe 'GET /auth/validate_token' do
     context 'when the request headers are valid' do
-      before { get '/api/auth/validate_token', params: {}, headers: headers }
+      before { get '/auth/validate_token', params: {}, headers: headers }
       
       it 'returns the user id' do
         expect(json_body[:data][:id].to_i).to eq(user.id)
@@ -30,7 +30,7 @@ RSpec.describe 'Users API', type: :request do
     context 'when the request headers are invalid' do
       before do
         headers['access-token'] = 'INVALID_TOKEN'
-        get '/api/auth/validate_token', params: {}, headers: headers
+        get '/auth/validate_token', params: {}, headers: headers
       end
       
       it 'returns status code 401' do
@@ -39,8 +39,8 @@ RSpec.describe 'Users API', type: :request do
     end
   end
   
-  describe 'POST /api/auth' do
-    before { post '/api/auth', params: user_params.to_json, headers: headers }
+  describe 'POST /auth' do
+    before { post '/auth', params: user_params.to_json, headers: headers }
     
     context 'when the request params are valid' do
       let(:user_params) { attributes_for(:user) }
@@ -67,8 +67,8 @@ RSpec.describe 'Users API', type: :request do
     end
   end
   
-  describe 'PUT /api/auth' do
-    before { put '/api/auth', params: user_params.to_json, headers: headers }
+  describe 'PUT /auth' do
+    before { put '/auth', params: user_params.to_json, headers: headers }
     
     context 'when the request params are valid' do
       let(:user_params) { { email: 'new_email@taskmanager.com' } }
@@ -95,8 +95,8 @@ RSpec.describe 'Users API', type: :request do
     end
   end
   
-  describe 'DELETE /api/auth' do
-    before { delete '/api/auth', params: {}, headers: headers }
+  describe 'DELETE /auth' do
+    before { delete '/auth', params: {}, headers: headers }
     
     it 'returns status code 200' do
       expect(response).to have_http_status(200)

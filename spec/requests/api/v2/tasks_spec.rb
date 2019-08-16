@@ -14,11 +14,11 @@ RSpec.describe 'Tasks API', type: :request do
     }
   end
   
-  describe 'GET /api/tasks' do
+  describe 'GET /tasks' do
     context 'when no filter params is sent' do
       before do
         create_list(:task, 5, user_id: user.id)
-        get '/api/tasks', params: {}, headers: headers
+        get '/tasks', params: {}, headers: headers
       end
       
       it 'returns status code 200' do
@@ -36,7 +36,7 @@ RSpec.describe 'Tasks API', type: :request do
       let!(:other_task_1) { create(:task, title: 'Fix the door', user_id: user.id) }
       let!(:other_task_2) { create(:task, title: 'Buy a new car', user_id: user.id) } 
     
-      before { get '/api/tasks?q[title_cont]=note&q[s]=title+ASC', params: {}, headers: headers }
+      before { get '/tasks?q[title_cont]=note&q[s]=title+ASC', params: {}, headers: headers }
       
       it 'returns only the tasks matching and in the correct order' do
         returned_task_titles = json_body[:data].map { |t| t[:attributes][:title] }
@@ -46,10 +46,10 @@ RSpec.describe 'Tasks API', type: :request do
     end
   end
   
-  describe 'GET /api/tasks/:id' do
+  describe 'GET /tasks/:id' do
     let(:task) { create(:task, user_id: user.id) }
     
-    before { get "/api/tasks/#{task.id}", params: {}, headers: headers }
+    before { get "/tasks/#{task.id}", params: {}, headers: headers }
     
     it 'returns status code 200' do
       expect(response).to have_http_status(200)
@@ -60,8 +60,8 @@ RSpec.describe 'Tasks API', type: :request do
     end
   end
   
-  describe 'POST /api/tasks' do
-    before { post '/api/tasks', params: { task: task_params }.to_json, headers: headers }
+  describe 'POST /tasks' do
+    before { post '/tasks', params: { task: task_params }.to_json, headers: headers }
     
     context 'when the request params are valid' do
       let(:task_params) { attributes_for(:task) }
@@ -100,10 +100,10 @@ RSpec.describe 'Tasks API', type: :request do
     end
   end
   
-  describe 'PUT /api/tasks/:id' do
+  describe 'PUT /tasks/:id' do
     let!(:task) { create(:task, user_id: user.id) }
     
-    before { put "/api/tasks/#{task.id}", params: { task: task_params }.to_json, headers:headers }
+    before { put "/tasks/#{task.id}", params: { task: task_params }.to_json, headers:headers }
     
     context 'when the params are valid' do
       let(:task_params) { { title: 'New task title' } }
@@ -138,10 +138,10 @@ RSpec.describe 'Tasks API', type: :request do
     end
   end
   
-  describe 'DELETE /api/tasks/:id' do
+  describe 'DELETE /tasks/:id' do
     let!(:task) { create(:task, user_id: user.id) }
     
-    before { delete "/api/tasks/#{task.id}", params: {}, headers: headers }
+    before { delete "/tasks/#{task.id}", params: {}, headers: headers }
     
     it 'returns status code 204' do
       expect(response).to have_http_status(204)
